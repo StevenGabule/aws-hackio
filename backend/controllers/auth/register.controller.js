@@ -28,10 +28,7 @@ exports.register = (req, res) => {
             Data: `<html><body><h1>Hello ${name}</h1><p>Test email</p></body></html>`
           }
         },
-        Subject: {
-          Charset: 'UTF-8',
-          Data: 'Complete your registration'
-        }
+        Subject: { Charset: 'UTF-8', Data: 'Complete your registration'}
       }
     }
     const sendingEmail = ses.sendEmail(params).promise();
