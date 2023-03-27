@@ -3,25 +3,46 @@ import { useState } from 'react'
 import Layouts from '../components/layouts/Layouts';
 import axios from 'axios'
 
+const USER = {
+  name: '',
+  email: '',
+  password: '',
+  confirm_password: '',
+}
+
+const ERROR = {
+  status: false,
+    message: ''
+}
+
+const SUCCESS = {
+  status: false,
+    message: ''
+}
+
 const RegisterPage = () => {
-  const [user, setUser] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirm_password: '',
-  })
+  const [user, setUser] = useState(USER)
 
   const [isLoading, setIsLoading] = useState(false);
-  const [onError, setOnError] = useState(null);
-  const [onSuccess, setOnSuccess] = useState(false);
+  const [onError, setOnError] = useState(ERROR);
+  const [onSuccess, setOnSuccess] = useState(SUCCESS);
 
   const handleSubmit = async (e) => {
+    setIsLoading(true)
+    setOnError(ERROR)
+    setOnError(SUCCESS)
+    
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:8003/api/register', user)
-      console.log(res.data);
+      const res = await axios.post(`${process.env.SERVER_URL}/register`, user)
+      setUser(USER)
+      setOnSuccess(prev => ({...prev, status: true, message: res.data.message}))
+      console.log();
     } catch (err) {
-      console.error(err.message);
+      // console.error(err.response.data.message);
+      setOnError(prev => ({ ...prev, status: true, message: err.response.data.message }))
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -33,7 +54,15 @@ const RegisterPage = () => {
   return (
     <Layouts>
       <form onSubmit={handleSubmit}>
-        {JSON.stringify(user)}
+      
+        {onError.status && <div className="alert alert-danger" role="alert">
+          {onError.message}
+        </div>}
+
+        {onSuccess.status && <div className="alert alert-success" role="alert">
+          {onSuccess.message}
+        </div>}
+
         <div className='form-group'>
           <input type={'text'} value={user.name} name='name' onChange={handleChange} required className='form-control' placeholder='Enter name' />
         </div>
@@ -47,7 +76,7 @@ const RegisterPage = () => {
           <input type={'password'} value={user.confirm_password} name='confirm_password' onChange={handleChange} className='form-control' placeholder='Confirm Password' />
         </div>
         <div className='form-group'>
-          <button type='submit' className='btn btn-warning'>Register</button>
+          <button type='submit' className='btn btn-warning' disabled={isLoading}>{isLoading ? "Please wait..." : "Register"}</button>
         </div>
       </form>
     </Layouts>
