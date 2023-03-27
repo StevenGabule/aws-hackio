@@ -31,13 +31,12 @@ const userSchema = new mongoose.Schema({
   salt: String,
   role: {
     type: String,
-    default: 'subscriber'
+    // default: 'subscriber'
   },
   resetPasswordLink: {
     data: String,
-    default: ''
   }
-}, { timestamps: true })
+}, { timestamps: true });
 
 // virtual fields
 userSchema.virtual('password')
