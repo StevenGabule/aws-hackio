@@ -13,7 +13,7 @@ exports.basicEmailTemplate = (email, token) => {
               <body>
                 <h1>Verify your email address</h1>
                 <p>Please use the following link to complete your registration:</p>
-                <p>${process.env.CLIENT_URI}/auth/activate/${token}</p>
+                <p>${process.env.CLIENT_URI}/account/activate/${token}</p>
               </body>
             </html>`
         }
