@@ -6,12 +6,12 @@ const { NewPassword } = require('../controllers/auth/new_password.controller');
 const { register } = require('../controllers/auth/register.controller');
 const { VerifyAccount } = require('../controllers/auth/verify_account.controller');
 const { runValidation } = require('../controllers/validators');
-const { userRegisterValidator } = require('../controllers/validators/auth');
+const { userRegisterValidator, userLoginValidator } = require('../controllers/validators/auth');
 const router = express.Router();
 
 router.post('/register', userRegisterValidator, runValidation, register);
 router.post('/activate', ActivateAccount);
-router.post('/login', Login)
+router.post('/login', userLoginValidator, runValidation, Login)
 router.put('/new-password', NewPassword)
 router.post('/forgot-password', ForgotPassword)
 router.post('/verify-account', VerifyAccount)

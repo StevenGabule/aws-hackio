@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import Layouts from '../components/layouts/Layouts';
 import axios from 'axios'
+import { isAuth } from '../helpers/auth';
+import Router from 'next/router';
 
 const USER = {
   name: '',
@@ -26,6 +28,11 @@ const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [onError, setOnError] = useState(ERROR);
   const [onSuccess, setOnSuccess] = useState(SUCCESS);
+
+  useEffect(() => {
+    isAuth() && Router.push('/');
+  }, [])
+
 
   const handleSubmit = async (e) => {
     setIsLoading(true)
